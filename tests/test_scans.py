@@ -6,6 +6,10 @@ of readout system and the FE-I4 works fine. The tests take about 10 min.
 Note:
 Please change the FE-I4 flavor (fe_flavor) according to your FE-I4 inside the tests/test_scans/configuration.yaml file.
 '''
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 
 import unittest
 import os
@@ -13,7 +17,7 @@ import fnmatch
 import shutil
 import tables as tb
 import numpy as np
-from Queue import Empty
+from queue import Empty
 
 from pybar.run_manager import RunManager
 from pybar.scans.scan_digital import DigitalScan

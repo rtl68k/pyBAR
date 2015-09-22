@@ -1,3 +1,8 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from past.builtins import basestring
 import logging
 import time
 import re
@@ -9,7 +14,7 @@ import zmq
 import numpy as np
 from functools import wraps
 from threading import Event, Thread
-from Queue import Queue
+from queue import Queue
 from collections import namedtuple, Mapping
 from contextlib import contextmanager
 import abc
@@ -23,14 +28,14 @@ from pybar.fei4.register_utils import FEI4RegisterUtils, is_fe_ready
 from pybar.daq.fifo_readout import FifoReadout, RxSyncError, EightbTenbError, FifoError, NoDataTimeout, StopTimeout
 from pybar.daq.fei4_raw_data import open_raw_data_file
 from pybar.analysis.analysis_utils import AnalysisError
+from future.utils import with_metaclass
 
 
-class Fei4RunBase(RunBase):
+class Fei4RunBase(with_metaclass(abc.ABCMeta, RunBase)):
     '''Basic FEI4 run meta class.
 
     Base class for scan- / tune- / analyze-class.
     '''
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, conf, run_conf=None):
         # default run conf parameters added for all scans
@@ -199,7 +204,7 @@ class Fei4RunBase(RunBase):
         if 'fe_configuration' in self.conf:
             last_configuration = self._get_configuration()
             # init config, a number <=0 will also do the initialization (run 0 does not exists)
-            if (not self.conf['fe_configuration'] and not last_configuration) or (isinstance(self.conf['fe_configuration'], (int, long)) and self.conf['fe_configuration'] <= 0):
+            if (not self.conf['fe_configuration'] and not last_configuration) or (isinstance(self.conf['fe_configuration'], (int, int)) and self.conf['fe_configuration'] <= 0):
                 if 'chip_address' in self.conf and self.conf['chip_address']:
                     chip_address = self.conf['chip_address']
                     broadcast = False
@@ -221,7 +226,7 @@ class Fei4RunBase(RunBase):
                     fe_configuration = os.path.join(self.conf['working_dir'], self.conf['fe_configuration'])
                 self._conf['fe_configuration'] = FEI4Register(configuration_file=fe_configuration)
             # run number
-            elif isinstance(self.conf['fe_configuration'], (int, long)) and self.conf['fe_configuration'] > 0:
+            elif isinstance(self.conf['fe_configuration'], (int, int)) and self.conf['fe_configuration'] > 0:
                 self._conf['fe_configuration'] = FEI4Register(configuration_file=self._get_configuration(self.conf['fe_configuration']))
             # assume fe_configuration already initialized
             elif not isinstance(self.conf['fe_configuration'], FEI4Register):
@@ -259,7 +264,7 @@ class Fei4RunBase(RunBase):
         else:
             sp = namedtuple_with_defaults('scan_parameters', field_names=[])
             self.scan_parameters = sp()
-        logging.info('Scan parameter(s): %s', ', '.join(['%s=%s' % (key, value) for (key, value) in self.scan_parameters._asdict().items()]) if self.scan_parameters else 'None')
+        logging.info('Scan parameter(s): %s', ', '.join(['%s=%s' % (key, value) for (key, value) in list(self.scan_parameters._asdict().items())]) if self.scan_parameters else 'None')
 
         # init DUT
         if not isinstance(self.conf['dut'], Dut):
@@ -443,7 +448,7 @@ class Fei4RunBase(RunBase):
                         return os.path.join(root, cfgfile)
 
         if not run_number:
-            run_numbers = sorted(self._get_run_numbers(status='FINISHED').iterkeys(), reverse=True)
+            run_numbers = sorted(iter(self._get_run_numbers(status='FINISHED').keys()), reverse=True)
             for run_number in run_numbers:
                 cfg_file = find_file(run_number)
                 if cfg_file:
@@ -469,7 +474,7 @@ class Fei4RunBase(RunBase):
         scan_parameters_old = self.scan_parameters._asdict()
         self.scan_parameters = self.scan_parameters._replace(**fields)
         scan_parameters_new = self.scan_parameters._asdict()
-        diff = [name for name in scan_parameters_old.keys() if np.any(scan_parameters_old[name] != scan_parameters_new[name])]
+        diff = [name for name in list(scan_parameters_old.keys()) if np.any(scan_parameters_old[name] != scan_parameters_new[name])]
         if diff:
             logging.info('Changing scan parameter(s): %s', ', '.join([('%s=%s' % (name, fields[name])) for name in diff]))
 

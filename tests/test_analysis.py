@@ -1,5 +1,7 @@
 ''' Script to check the correctness of the analysis. The analysis is done on raw data and all results are compared to a recorded analysis.
 '''
+from builtins import str
+from builtins import range
 
 import unittest
 import os

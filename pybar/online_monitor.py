@@ -1,3 +1,6 @@
+from __future__ import division
+from builtins import str
+from past.utils import old_div
 import sys
 import zmq
 import time
@@ -296,12 +299,12 @@ class OnlineMonitorApplication(QtGui.QMainWindow):
         self.setup_filename(**config_data)
 
     def setup_run_config_text(self, conf):
-        for key, value in sorted(conf.iteritems()):
+        for key, value in sorted(conf.items()):
             item = Qt.QListWidgetItem("%s: %s" % (key, value))
             self.run_conf_list_widget.addItem(item)
 
     def setup_global_config_text(self, conf):
-        for key, value in sorted(conf.iteritems()):
+        for key, value in sorted(conf.items()):
             item = Qt.QListWidgetItem("%s: %s" % (key, value))
             self.global_conf_list_widget.addItem(item)
 
@@ -330,15 +333,15 @@ class OnlineMonitorApplication(QtGui.QMainWindow):
 
     def update_monitor(self, timestamp_start, timestamp_stop, readout_error, scan_parameters, n_hits, n_events):
         self.timestamp_label.setText("Data Timestamp\n%s" % time.asctime(time.localtime(timestamp_stop)))
-        self.scan_parameter_label.setText("Scan Parameters\n%s" % ', '.join('%s: %s' % (str(key), str(val)) for key, val in scan_parameters.iteritems()))
+        self.scan_parameter_label.setText("Scan Parameters\n%s" % ', '.join('%s: %s' % (str(key), str(val)) for key, val in scan_parameters.items()))
         now = ptime.time()
         recent_total_hits = n_hits
         recent_total_events = n_events
         self.plot_delay = self.plot_delay * 0.9 + (now - timestamp_stop) * 0.1
         self.plot_delay_label.setText("Plot Delay\n%s" % ((time.strftime('%H:%M:%S', time.gmtime(self.plot_delay))) if abs(self.plot_delay) > 5 else "%1.2f ms" % (self.plot_delay * 1.e3)))
-        recent_fps = 1.0 / (now - self.updateTime)  # calculate FPS
-        recent_hps = (recent_total_hits - self.total_hits) / (now - self.updateTime)
-        recent_eps = (recent_total_events - self.total_events) / (now - self.updateTime)
+        recent_fps = old_div(1.0, (now - self.updateTime))  # calculate FPS
+        recent_hps = old_div((recent_total_hits - self.total_hits), (now - self.updateTime))
+        recent_eps = old_div((recent_total_events - self.total_events), (now - self.updateTime))
         self.updateTime = now
         self.total_hits = recent_total_hits
         self.total_events = recent_total_events

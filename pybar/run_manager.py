@@ -1,3 +1,8 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import logging
 from yaml import safe_load
 import datetime
@@ -19,6 +24,7 @@ from ast import literal_eval
 from time import time
 from threading import current_thread
 from functools import wraps
+from future.utils import with_metaclass
 
 
 punctuation = """!,.:;?"""
@@ -38,12 +44,11 @@ class RunStopped(Exception):
     pass
 
 
-class RunBase():
+class RunBase(with_metaclass(abc.ABCMeta, object)):
     '''Basic run meta class
 
     Base class for run class.
     '''
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, conf, run_conf=None):
         """Initialize object.
@@ -151,7 +156,7 @@ class RunBase():
         logging.info('Starting run #%d (%s) in %s', self.run_number, self.__class__.__name__, self.working_dir)
 
     def _init_run_conf(self, run_conf, update=False):
-        sc = namedtuple('run_configuration', field_names=self.default_run_conf.iterkeys())
+        sc = namedtuple('run_configuration', field_names=iter(self.default_run_conf.keys()))
         if update:
             default_run_conf = sc(**self.run_conf)
         else:
@@ -349,9 +354,9 @@ class RunManager(object):
         '''
         # fixing event handler: http://stackoverflow.com/questions/15457786/ctrl-c-crashes-python-after-importing-scipy-stats
         if os.name == 'nt':
-            import thread
+            import _thread
 
-            def handler(signum, hook=thread.interrupt_main):
+            def handler(signum, hook=_thread.interrupt_main):
                 hook()
                 return True
 

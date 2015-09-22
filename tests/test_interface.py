@@ -1,10 +1,13 @@
 ''' Script to check the readout system interface (software + FPGA firmware).
 A global register test is performed with pyBAR and a simulation of the FPGA + FE-I4.
 '''
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import unittest
 import shutil
 import mock
-from Queue import Empty
+from queue import Empty
 import subprocess
 import time
 import os
@@ -26,7 +29,7 @@ def send_commands(self, commands, repeat=1, wait_for_finish=True, concatenate=Tr
     if concatenate:
         commands_iter = iter(commands)
         try:
-            concatenated_cmd = commands_iter.next()
+            concatenated_cmd = next(commands_iter)
         except StopIteration:
             logging.warning('No commands to be sent')
         else:
