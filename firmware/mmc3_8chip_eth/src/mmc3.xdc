@@ -224,3 +224,160 @@ set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
+
+
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list BUS_CLK]]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 8 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[0]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[1]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[2]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[3]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[4]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[5]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[6]} {icmd/i_cmd_seq_core/CONF_OUTPUT_ENABLE[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 3 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {SEL_CLK40[0]} {SEL_CLK40[1]} {SEL_CLK40[2]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
+set_property port_width 32 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {FE_FIFO_DATA[1][0]} {FE_FIFO_DATA[1][1]} {FE_FIFO_DATA[1][2]} {FE_FIFO_DATA[1][3]} {FE_FIFO_DATA[1][4]} {FE_FIFO_DATA[1][5]} {FE_FIFO_DATA[1][6]} {FE_FIFO_DATA[1][7]} {FE_FIFO_DATA[1][8]} {FE_FIFO_DATA[1][9]} {FE_FIFO_DATA[1][10]} {FE_FIFO_DATA[1][11]} {FE_FIFO_DATA[1][12]} {FE_FIFO_DATA[1][13]} {FE_FIFO_DATA[1][14]} {FE_FIFO_DATA[1][15]} {FE_FIFO_DATA[1][16]} {FE_FIFO_DATA[1][17]} {FE_FIFO_DATA[1][18]} {FE_FIFO_DATA[1][19]} {FE_FIFO_DATA[1][20]} {FE_FIFO_DATA[1][21]} {FE_FIFO_DATA[1][22]} {FE_FIFO_DATA[1][23]} {FE_FIFO_DATA[1][24]} {FE_FIFO_DATA[1][25]} {FE_FIFO_DATA[1][26]} {FE_FIFO_DATA[1][27]} {FE_FIFO_DATA[1][28]} {FE_FIFO_DATA[1][29]} {FE_FIFO_DATA[1][30]} {FE_FIFO_DATA[1][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
+set_property port_width 32 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {FE_FIFO_DATA[6][0]} {FE_FIFO_DATA[6][1]} {FE_FIFO_DATA[6][2]} {FE_FIFO_DATA[6][3]} {FE_FIFO_DATA[6][4]} {FE_FIFO_DATA[6][5]} {FE_FIFO_DATA[6][6]} {FE_FIFO_DATA[6][7]} {FE_FIFO_DATA[6][8]} {FE_FIFO_DATA[6][9]} {FE_FIFO_DATA[6][10]} {FE_FIFO_DATA[6][11]} {FE_FIFO_DATA[6][12]} {FE_FIFO_DATA[6][13]} {FE_FIFO_DATA[6][14]} {FE_FIFO_DATA[6][15]} {FE_FIFO_DATA[6][16]} {FE_FIFO_DATA[6][17]} {FE_FIFO_DATA[6][18]} {FE_FIFO_DATA[6][19]} {FE_FIFO_DATA[6][20]} {FE_FIFO_DATA[6][21]} {FE_FIFO_DATA[6][22]} {FE_FIFO_DATA[6][23]} {FE_FIFO_DATA[6][24]} {FE_FIFO_DATA[6][25]} {FE_FIFO_DATA[6][26]} {FE_FIFO_DATA[6][27]} {FE_FIFO_DATA[6][28]} {FE_FIFO_DATA[6][29]} {FE_FIFO_DATA[6][30]} {FE_FIFO_DATA[6][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
+set_property port_width 32 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {cdc_data_out[0]} {cdc_data_out[1]} {cdc_data_out[2]} {cdc_data_out[3]} {cdc_data_out[4]} {cdc_data_out[5]} {cdc_data_out[6]} {cdc_data_out[7]} {cdc_data_out[8]} {cdc_data_out[9]} {cdc_data_out[10]} {cdc_data_out[11]} {cdc_data_out[12]} {cdc_data_out[13]} {cdc_data_out[14]} {cdc_data_out[15]} {cdc_data_out[16]} {cdc_data_out[17]} {cdc_data_out[18]} {cdc_data_out[19]} {cdc_data_out[20]} {cdc_data_out[21]} {cdc_data_out[22]} {cdc_data_out[23]} {cdc_data_out[24]} {cdc_data_out[25]} {cdc_data_out[26]} {cdc_data_out[27]} {cdc_data_out[28]} {cdc_data_out[29]} {cdc_data_out[30]} {cdc_data_out[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
+set_property port_width 8 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {MUX_DATA_OUT[0]} {MUX_DATA_OUT[1]} {MUX_DATA_OUT[2]} {MUX_DATA_OUT[3]} {MUX_DATA_OUT[4]} {MUX_DATA_OUT[5]} {MUX_DATA_OUT[6]} {MUX_DATA_OUT[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
+set_property port_width 8 [get_debug_ports u_ila_0/probe6]
+connect_debug_port u_ila_0/probe6 [get_nets [list {TDC_FIFO_EMPTY[0]} {TDC_FIFO_EMPTY[1]} {TDC_FIFO_EMPTY[2]} {TDC_FIFO_EMPTY[3]} {TDC_FIFO_EMPTY[4]} {TDC_FIFO_EMPTY[5]} {TDC_FIFO_EMPTY[6]} {TDC_FIFO_EMPTY[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
+set_property port_width 32 [get_debug_ports u_ila_0/probe7]
+connect_debug_port u_ila_0/probe7 [get_nets [list {FE_FIFO_DATA[4][0]} {FE_FIFO_DATA[4][1]} {FE_FIFO_DATA[4][2]} {FE_FIFO_DATA[4][3]} {FE_FIFO_DATA[4][4]} {FE_FIFO_DATA[4][5]} {FE_FIFO_DATA[4][6]} {FE_FIFO_DATA[4][7]} {FE_FIFO_DATA[4][8]} {FE_FIFO_DATA[4][9]} {FE_FIFO_DATA[4][10]} {FE_FIFO_DATA[4][11]} {FE_FIFO_DATA[4][12]} {FE_FIFO_DATA[4][13]} {FE_FIFO_DATA[4][14]} {FE_FIFO_DATA[4][15]} {FE_FIFO_DATA[4][16]} {FE_FIFO_DATA[4][17]} {FE_FIFO_DATA[4][18]} {FE_FIFO_DATA[4][19]} {FE_FIFO_DATA[4][20]} {FE_FIFO_DATA[4][21]} {FE_FIFO_DATA[4][22]} {FE_FIFO_DATA[4][23]} {FE_FIFO_DATA[4][24]} {FE_FIFO_DATA[4][25]} {FE_FIFO_DATA[4][26]} {FE_FIFO_DATA[4][27]} {FE_FIFO_DATA[4][28]} {FE_FIFO_DATA[4][29]} {FE_FIFO_DATA[4][30]} {FE_FIFO_DATA[4][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
+set_property port_width 8 [get_debug_ports u_ila_0/probe8]
+connect_debug_port u_ila_0/probe8 [get_nets [list {TCP_TX_DATA[0]} {TCP_TX_DATA[1]} {TCP_TX_DATA[2]} {TCP_TX_DATA[3]} {TCP_TX_DATA[4]} {TCP_TX_DATA[5]} {TCP_TX_DATA[6]} {TCP_TX_DATA[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
+set_property port_width 8 [get_debug_ports u_ila_0/probe9]
+connect_debug_port u_ila_0/probe9 [get_nets [list {FE_FIFO_EMPTY[0]} {FE_FIFO_EMPTY[1]} {FE_FIFO_EMPTY[2]} {FE_FIFO_EMPTY[3]} {FE_FIFO_EMPTY[4]} {FE_FIFO_EMPTY[5]} {FE_FIFO_EMPTY[6]} {FE_FIFO_EMPTY[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe10]
+set_property port_width 8 [get_debug_ports u_ila_0/probe10]
+connect_debug_port u_ila_0/probe10 [get_nets [list {RX_READY[0]} {RX_READY[1]} {RX_READY[2]} {RX_READY[3]} {RX_READY[4]} {RX_READY[5]} {RX_READY[6]} {RX_READY[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe11]
+set_property port_width 32 [get_debug_ports u_ila_0/probe11]
+connect_debug_port u_ila_0/probe11 [get_nets [list {FE_FIFO_DATA[7][0]} {FE_FIFO_DATA[7][1]} {FE_FIFO_DATA[7][2]} {FE_FIFO_DATA[7][3]} {FE_FIFO_DATA[7][4]} {FE_FIFO_DATA[7][5]} {FE_FIFO_DATA[7][6]} {FE_FIFO_DATA[7][7]} {FE_FIFO_DATA[7][8]} {FE_FIFO_DATA[7][9]} {FE_FIFO_DATA[7][10]} {FE_FIFO_DATA[7][11]} {FE_FIFO_DATA[7][12]} {FE_FIFO_DATA[7][13]} {FE_FIFO_DATA[7][14]} {FE_FIFO_DATA[7][15]} {FE_FIFO_DATA[7][16]} {FE_FIFO_DATA[7][17]} {FE_FIFO_DATA[7][18]} {FE_FIFO_DATA[7][19]} {FE_FIFO_DATA[7][20]} {FE_FIFO_DATA[7][21]} {FE_FIFO_DATA[7][22]} {FE_FIFO_DATA[7][23]} {FE_FIFO_DATA[7][24]} {FE_FIFO_DATA[7][25]} {FE_FIFO_DATA[7][26]} {FE_FIFO_DATA[7][27]} {FE_FIFO_DATA[7][28]} {FE_FIFO_DATA[7][29]} {FE_FIFO_DATA[7][30]} {FE_FIFO_DATA[7][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe12]
+set_property port_width 8 [get_debug_ports u_ila_0/probe12]
+connect_debug_port u_ila_0/probe12 [get_nets [list {BUS_DATA_IN[0]} {BUS_DATA_IN[1]} {BUS_DATA_IN[2]} {BUS_DATA_IN[3]} {BUS_DATA_IN[4]} {BUS_DATA_IN[5]} {BUS_DATA_IN[6]} {BUS_DATA_IN[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe13]
+set_property port_width 32 [get_debug_ports u_ila_0/probe13]
+connect_debug_port u_ila_0/probe13 [get_nets [list {FE_FIFO_DATA[5][0]} {FE_FIFO_DATA[5][1]} {FE_FIFO_DATA[5][2]} {FE_FIFO_DATA[5][3]} {FE_FIFO_DATA[5][4]} {FE_FIFO_DATA[5][5]} {FE_FIFO_DATA[5][6]} {FE_FIFO_DATA[5][7]} {FE_FIFO_DATA[5][8]} {FE_FIFO_DATA[5][9]} {FE_FIFO_DATA[5][10]} {FE_FIFO_DATA[5][11]} {FE_FIFO_DATA[5][12]} {FE_FIFO_DATA[5][13]} {FE_FIFO_DATA[5][14]} {FE_FIFO_DATA[5][15]} {FE_FIFO_DATA[5][16]} {FE_FIFO_DATA[5][17]} {FE_FIFO_DATA[5][18]} {FE_FIFO_DATA[5][19]} {FE_FIFO_DATA[5][20]} {FE_FIFO_DATA[5][21]} {FE_FIFO_DATA[5][22]} {FE_FIFO_DATA[5][23]} {FE_FIFO_DATA[5][24]} {FE_FIFO_DATA[5][25]} {FE_FIFO_DATA[5][26]} {FE_FIFO_DATA[5][27]} {FE_FIFO_DATA[5][28]} {FE_FIFO_DATA[5][29]} {FE_FIFO_DATA[5][30]} {FE_FIFO_DATA[5][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe14]
+set_property port_width 32 [get_debug_ports u_ila_0/probe14]
+connect_debug_port u_ila_0/probe14 [get_nets [list {ARB_DATA_OUT[0]} {ARB_DATA_OUT[1]} {ARB_DATA_OUT[2]} {ARB_DATA_OUT[3]} {ARB_DATA_OUT[4]} {ARB_DATA_OUT[5]} {ARB_DATA_OUT[6]} {ARB_DATA_OUT[7]} {ARB_DATA_OUT[8]} {ARB_DATA_OUT[9]} {ARB_DATA_OUT[10]} {ARB_DATA_OUT[11]} {ARB_DATA_OUT[12]} {ARB_DATA_OUT[13]} {ARB_DATA_OUT[14]} {ARB_DATA_OUT[15]} {ARB_DATA_OUT[16]} {ARB_DATA_OUT[17]} {ARB_DATA_OUT[18]} {ARB_DATA_OUT[19]} {ARB_DATA_OUT[20]} {ARB_DATA_OUT[21]} {ARB_DATA_OUT[22]} {ARB_DATA_OUT[23]} {ARB_DATA_OUT[24]} {ARB_DATA_OUT[25]} {ARB_DATA_OUT[26]} {ARB_DATA_OUT[27]} {ARB_DATA_OUT[28]} {ARB_DATA_OUT[29]} {ARB_DATA_OUT[30]} {ARB_DATA_OUT[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe15]
+set_property port_width 32 [get_debug_ports u_ila_0/probe15]
+connect_debug_port u_ila_0/probe15 [get_nets [list {BUS_ADD[0]} {BUS_ADD[1]} {BUS_ADD[2]} {BUS_ADD[3]} {BUS_ADD[4]} {BUS_ADD[5]} {BUS_ADD[6]} {BUS_ADD[7]} {BUS_ADD[8]} {BUS_ADD[9]} {BUS_ADD[10]} {BUS_ADD[11]} {BUS_ADD[12]} {BUS_ADD[13]} {BUS_ADD[14]} {BUS_ADD[15]} {BUS_ADD[16]} {BUS_ADD[17]} {BUS_ADD[18]} {BUS_ADD[19]} {BUS_ADD[20]} {BUS_ADD[21]} {BUS_ADD[22]} {BUS_ADD[23]} {BUS_ADD[24]} {BUS_ADD[25]} {BUS_ADD[26]} {BUS_ADD[27]} {BUS_ADD[28]} {BUS_ADD[29]} {BUS_ADD[30]} {BUS_ADD[31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe16]
+set_property port_width 8 [get_debug_ports u_ila_0/probe16]
+connect_debug_port u_ila_0/probe16 [get_nets [list {TDC_FIFO_READ[0]} {TDC_FIFO_READ[1]} {TDC_FIFO_READ[2]} {TDC_FIFO_READ[3]} {TDC_FIFO_READ[4]} {TDC_FIFO_READ[5]} {TDC_FIFO_READ[6]} {TDC_FIFO_READ[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe17]
+set_property port_width 32 [get_debug_ports u_ila_0/probe17]
+connect_debug_port u_ila_0/probe17 [get_nets [list {FE_FIFO_DATA[0][0]} {FE_FIFO_DATA[0][1]} {FE_FIFO_DATA[0][2]} {FE_FIFO_DATA[0][3]} {FE_FIFO_DATA[0][4]} {FE_FIFO_DATA[0][5]} {FE_FIFO_DATA[0][6]} {FE_FIFO_DATA[0][7]} {FE_FIFO_DATA[0][8]} {FE_FIFO_DATA[0][9]} {FE_FIFO_DATA[0][10]} {FE_FIFO_DATA[0][11]} {FE_FIFO_DATA[0][12]} {FE_FIFO_DATA[0][13]} {FE_FIFO_DATA[0][14]} {FE_FIFO_DATA[0][15]} {FE_FIFO_DATA[0][16]} {FE_FIFO_DATA[0][17]} {FE_FIFO_DATA[0][18]} {FE_FIFO_DATA[0][19]} {FE_FIFO_DATA[0][20]} {FE_FIFO_DATA[0][21]} {FE_FIFO_DATA[0][22]} {FE_FIFO_DATA[0][23]} {FE_FIFO_DATA[0][24]} {FE_FIFO_DATA[0][25]} {FE_FIFO_DATA[0][26]} {FE_FIFO_DATA[0][27]} {FE_FIFO_DATA[0][28]} {FE_FIFO_DATA[0][29]} {FE_FIFO_DATA[0][30]} {FE_FIFO_DATA[0][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe18]
+set_property port_width 8 [get_debug_ports u_ila_0/probe18]
+connect_debug_port u_ila_0/probe18 [get_nets [list {FE_FIFO_READ[0]} {FE_FIFO_READ[1]} {FE_FIFO_READ[2]} {FE_FIFO_READ[3]} {FE_FIFO_READ[4]} {FE_FIFO_READ[5]} {FE_FIFO_READ[6]} {FE_FIFO_READ[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe19]
+set_property port_width 32 [get_debug_ports u_ila_0/probe19]
+connect_debug_port u_ila_0/probe19 [get_nets [list {FE_FIFO_DATA[2][0]} {FE_FIFO_DATA[2][1]} {FE_FIFO_DATA[2][2]} {FE_FIFO_DATA[2][3]} {FE_FIFO_DATA[2][4]} {FE_FIFO_DATA[2][5]} {FE_FIFO_DATA[2][6]} {FE_FIFO_DATA[2][7]} {FE_FIFO_DATA[2][8]} {FE_FIFO_DATA[2][9]} {FE_FIFO_DATA[2][10]} {FE_FIFO_DATA[2][11]} {FE_FIFO_DATA[2][12]} {FE_FIFO_DATA[2][13]} {FE_FIFO_DATA[2][14]} {FE_FIFO_DATA[2][15]} {FE_FIFO_DATA[2][16]} {FE_FIFO_DATA[2][17]} {FE_FIFO_DATA[2][18]} {FE_FIFO_DATA[2][19]} {FE_FIFO_DATA[2][20]} {FE_FIFO_DATA[2][21]} {FE_FIFO_DATA[2][22]} {FE_FIFO_DATA[2][23]} {FE_FIFO_DATA[2][24]} {FE_FIFO_DATA[2][25]} {FE_FIFO_DATA[2][26]} {FE_FIFO_DATA[2][27]} {FE_FIFO_DATA[2][28]} {FE_FIFO_DATA[2][29]} {FE_FIFO_DATA[2][30]} {FE_FIFO_DATA[2][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe20]
+set_property port_width 8 [get_debug_ports u_ila_0/probe20]
+connect_debug_port u_ila_0/probe20 [get_nets [list {RX_ENABLED[0]} {RX_ENABLED[1]} {RX_ENABLED[2]} {RX_ENABLED[3]} {RX_ENABLED[4]} {RX_ENABLED[5]} {RX_ENABLED[6]} {RX_ENABLED[7]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe21]
+set_property port_width 32 [get_debug_ports u_ila_0/probe21]
+connect_debug_port u_ila_0/probe21 [get_nets [list {FE_FIFO_DATA[3][0]} {FE_FIFO_DATA[3][1]} {FE_FIFO_DATA[3][2]} {FE_FIFO_DATA[3][3]} {FE_FIFO_DATA[3][4]} {FE_FIFO_DATA[3][5]} {FE_FIFO_DATA[3][6]} {FE_FIFO_DATA[3][7]} {FE_FIFO_DATA[3][8]} {FE_FIFO_DATA[3][9]} {FE_FIFO_DATA[3][10]} {FE_FIFO_DATA[3][11]} {FE_FIFO_DATA[3][12]} {FE_FIFO_DATA[3][13]} {FE_FIFO_DATA[3][14]} {FE_FIFO_DATA[3][15]} {FE_FIFO_DATA[3][16]} {FE_FIFO_DATA[3][17]} {FE_FIFO_DATA[3][18]} {FE_FIFO_DATA[3][19]} {FE_FIFO_DATA[3][20]} {FE_FIFO_DATA[3][21]} {FE_FIFO_DATA[3][22]} {FE_FIFO_DATA[3][23]} {FE_FIFO_DATA[3][24]} {FE_FIFO_DATA[3][25]} {FE_FIFO_DATA[3][26]} {FE_FIFO_DATA[3][27]} {FE_FIFO_DATA[3][28]} {FE_FIFO_DATA[3][29]} {FE_FIFO_DATA[3][30]} {FE_FIFO_DATA[3][31]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe22]
+set_property port_width 1 [get_debug_ports u_ila_0/probe22]
+connect_debug_port u_ila_0/probe22 [get_nets [list ARB_READY_OUT]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe23]
+set_property port_width 1 [get_debug_ports u_ila_0/probe23]
+connect_debug_port u_ila_0/probe23 [get_nets [list ARB_WRITE_OUT]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe24]
+set_property port_width 1 [get_debug_ports u_ila_0/probe24]
+connect_debug_port u_ila_0/probe24 [get_nets [list BUS_RD]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe25]
+set_property port_width 1 [get_debug_ports u_ila_0/probe25]
+connect_debug_port u_ila_0/probe25 [get_nets [list BUS_RST]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe26]
+set_property port_width 1 [get_debug_ports u_ila_0/probe26]
+connect_debug_port u_ila_0/probe26 [get_nets [list BUS_WR]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe27]
+set_property port_width 1 [get_debug_ports u_ila_0/probe27]
+connect_debug_port u_ila_0/probe27 [get_nets [list cdc_fifo_empty]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe28]
+set_property port_width 1 [get_debug_ports u_ila_0/probe28]
+connect_debug_port u_ila_0/probe28 [get_nets [list FIFO_EMPTY]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe29]
+set_property port_width 1 [get_debug_ports u_ila_0/probe29]
+connect_debug_port u_ila_0/probe29 [get_nets [list full_32to8]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe30]
+set_property port_width 1 [get_debug_ports u_ila_0/probe30]
+connect_debug_port u_ila_0/probe30 [get_nets [list TCP_TX_FULL]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe31]
+set_property port_width 1 [get_debug_ports u_ila_0/probe31]
+connect_debug_port u_ila_0/probe31 [get_nets [list TCP_TX_WR]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe32]
+set_property port_width 1 [get_debug_ports u_ila_0/probe32]
+connect_debug_port u_ila_0/probe32 [get_nets [list TRIGGER_FIFO_EMPTY]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe33]
+set_property port_width 1 [get_debug_ports u_ila_0/probe33]
+connect_debug_port u_ila_0/probe33 [get_nets [list TRIGGER_FIFO_PREEMPT_REQ]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe34]
+set_property port_width 1 [get_debug_ports u_ila_0/probe34]
+connect_debug_port u_ila_0/probe34 [get_nets [list TRIGGER_FIFO_READ]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets BUS_CLK]

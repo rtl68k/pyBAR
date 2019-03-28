@@ -227,9 +227,9 @@ wire [7:0] TCP_RX_DATA;
 wire RBCP_ACK;
 wire SiTCP_RST;
 
-wire TCP_TX_FULL;
-wire TCP_TX_WR;
-wire [7:0] TCP_TX_DATA;
+(* mark_debug = "true" *) wire TCP_TX_FULL;
+(* mark_debug = "true" *) wire TCP_TX_WR;
+(* mark_debug = "true" *) wire [7:0] TCP_TX_DATA;
 
 
 WRAP_SiTCP_GMII_XC7K_32K sitcp(
@@ -298,9 +298,15 @@ WRAP_SiTCP_GMII_XC7K_32K sitcp(
 
 // -------  BUS SIGNALLING  ------- //
 
-wire BUS_WR, BUS_RD, BUS_RST;
-wire [31:0] BUS_ADD;
-wire [7:0] BUS_DATA;
+(* mark_debug = "true" *) wire BUS_WR;
+(* mark_debug = "true" *) wire BUS_RD;
+(* mark_debug = "true" *) wire BUS_RST;
+(* mark_debug = "true" *) wire [31:0] BUS_ADD;
+//wire [7:0] BUS_DATA;
+
+(* mark_debug = "true" *) wire [7:0] BUS_DATA_IN;
+(* mark_debug = "true" *) reg [7:0] MUX_DATA_OUT;
+
 assign BUS_RST = SiTCP_RST;
 
 rbcp_to_bus irbcp_to_bus(
@@ -318,7 +324,9 @@ rbcp_to_bus irbcp_to_bus(
     .BUS_WR(BUS_WR),
     .BUS_RD(BUS_RD),
     .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA)
+    //.BUS_DATA(BUS_DATA)
+    .BUS_DATA_IN(MUX_DATA_OUT), //from FPGA to RBCP
+    .BUS_DATA_OUT(BUS_DATA_IN) //from RBCP to FPGA
 );
 
 // -------  MODULE ADDRESSES  ------- //
@@ -339,6 +347,10 @@ localparam GPIO_DLY_BASEADDR = 32'hb000;
 localparam GPIO_DLY_HIGHADDR = 32'hb100-1;
 
 
+//
+wire [18:0] CS_OUT;
+wire [7:0] DATA_OUT [18:0];
+
 // -------  USER MODULES  ------- //
 wire [47:0] GPIO_DLY_IO;
 
@@ -355,15 +367,20 @@ gpio
     .BUS_CLK(BUS_CLK),
     .BUS_RST(BUS_RST),
     .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA),
+    //.BUS_DATA(BUS_DATA),
     .BUS_RD(BUS_RD),
     .BUS_WR(BUS_WR),
-    .IO(GPIO_DLY_IO)
+    .IO(GPIO_DLY_IO),
+
+    .BUS_DATA_IN(BUS_DATA_IN),
+    .CS_OUT(CS_OUT[0]),
+    .DATA_OUT(DATA_OUT[0])
 );
+
 wire [4:0] IDELAYE_CINVCTRL;
 wire [4:0] IDELAYE_LD;
 wire [4:0] IDELAYE_CNTVALUEIN [4:0];
-wire [2:0] SEL_CLK40;
+(* mark_debug = "true" *) wire [2:0] SEL_CLK40;
 
 assign IDELAYE_LD[0] = GPIO_DLY_IO[7];
 assign IDELAYE_CINVCTRL[0] = GPIO_DLY_IO[6];
@@ -401,7 +418,7 @@ cmd_seq #(
     .BUS_CLK(BUS_CLK),
     .BUS_RST(BUS_RST),
     .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA),
+    //.BUS_DATA(BUS_DATA),
     .BUS_RD(BUS_RD),
     .BUS_WR(BUS_WR),
 
@@ -412,7 +429,11 @@ cmd_seq #(
     .CMD_EXT_START_FLAG(CMD_EXT_START_FLAG),
     .CMD_EXT_START_ENABLE(EXT_TRIGGER_ENABLE),
     .CMD_READY(CMD_READY),
-    .CMD_START_FLAG(CMD_START_FLAG)
+    .CMD_START_FLAG(CMD_START_FLAG),
+
+    .BUS_DATA_IN(BUS_DATA_IN),
+    .CS_OUT(CS_OUT[1]),
+    .DATA_OUT(DATA_OUT[1])
 );
 
 reg [7:0] CLK_SR;
@@ -454,7 +475,8 @@ begin
 end
 assign TRIGGER_ACKNOWLEDGE_FLAG = CMD_READY & ~CMD_READY_FF;
 
-wire [7:0] RX_ENABLED, RX_ENABLED_CLK40;
+(* mark_debug = "true" *) wire [7:0] RX_ENABLED;
+wire RX_ENABLED_CLK40;
 three_stage_synchronizer #(
     .WIDTH(8)
 ) three_stage_sync_rx_enable_clk40 (
@@ -462,7 +484,8 @@ three_stage_synchronizer #(
     .IN(RX_ENABLED),
     .OUT(RX_ENABLED_CLK40)
 );
-wire [7:0] FE_FIFO_EMPTY, FE_FIFO_EMPTY_CLK40;
+(* mark_debug = "true" *) wire [7:0] FE_FIFO_EMPTY;
+wire FE_FIFO_EMPTY_CLK40;
 three_stage_synchronizer #(
     .WIDTH(8)
 ) three_stage_sync_fe_fifo_empty_clk40 (
@@ -478,13 +501,14 @@ integer fifo_empty_counter;
 wire CMD_FIFO_READY_FLAG;
 reg CMD_FIFO_READY_FF;
 
-wire TRIGGER_FIFO_READ;
-wire TRIGGER_FIFO_EMPTY;
+(* mark_debug = "true" *) wire TRIGGER_FIFO_READ;
+(* mark_debug = "true" *) wire TRIGGER_FIFO_EMPTY;
 wire [31:0] TRIGGER_FIFO_DATA;
-wire TRIGGER_FIFO_PREEMPT_REQ;
+(* mark_debug = "true" *) wire TRIGGER_FIFO_PREEMPT_REQ;
 wire [31:0] TIMESTAMP;
 wire [7:0] TDC_OUT;
-wire [7:0] RX_READY, RX_8B10B_DECODER_ERR, RX_FIFO_OVERFLOW_ERR, RX_FIFO_FULL;
+(* mark_debug = "true" *) wire [7:0] RX_READY;
+wire [7:0] RX_8B10B_DECODER_ERR, RX_FIFO_OVERFLOW_ERR, RX_FIFO_FULL;
 wire FIFO_FULL;
 wire TLU_BUSY, TLU_CLOCK;
 wire TRIGGER_ENABLED, TLU_ENABLED;
@@ -541,7 +565,7 @@ tlu_controller #(
     .BUS_CLK(BUS_CLK),
     .BUS_RST(BUS_RST),
     .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA),
+    //.BUS_DATA(BUS_DATA),
     .BUS_RD(BUS_RD),
     .BUS_WR(BUS_WR),
 
@@ -570,19 +594,23 @@ tlu_controller #(
     .TLU_BUSY(TLU_BUSY),
     .TLU_CLOCK(TLU_CLOCK),
 
-    .TIMESTAMP(TIMESTAMP)
+    .TIMESTAMP(TIMESTAMP),
+
+    .BUS_DATA_IN(BUS_DATA_IN),
+    .CS_OUT(CS_OUT[2]),
+    .DATA_OUT(DATA_OUT[2])
 );
 
 //reg [31:0] timestamp_gray;
 //always@(posedge BUS_CLK)
 //    timestamp_gray <= (TIMESTAMP>>1) ^ TIMESTAMP;
 
-wire [7:0] FE_FIFO_READ;
+(* mark_debug = "true" *) wire [7:0] FE_FIFO_READ;
 //wire [7:0] FE_FIFO_EMPTY;
-wire [31:0] FE_FIFO_DATA [7:0];
+(* mark_debug = "true" *) wire [31:0] FE_FIFO_DATA [7:0];
 
-wire [7:0] TDC_FIFO_READ;
-wire [7:0] TDC_FIFO_EMPTY;
+(* mark_debug = "true" *) wire [7:0] TDC_FIFO_READ;
+(* mark_debug = "true" *) wire [7:0] TDC_FIFO_EMPTY;
 wire [31:0] TDC_FIFO_DATA [7:0];
 
 genvar i;
@@ -618,9 +646,13 @@ generate
         .BUS_CLK(BUS_CLK),
         .BUS_RST(BUS_RST),
         .BUS_ADD(BUS_ADD),
-        .BUS_DATA(BUS_DATA),
+        //.BUS_DATA(BUS_DATA),
         .BUS_RD(BUS_RD),
-        .BUS_WR(BUS_WR)
+        .BUS_WR(BUS_WR),
+
+        .BUS_DATA_IN(BUS_DATA_IN),
+        .CS_OUT(CS_OUT[i+3]),
+        .DATA_OUT(DATA_OUT[i+3]) //3 to 10
     );
 
     IBUFDS #(
@@ -705,14 +737,18 @@ generate
         .BUS_CLK(BUS_CLK),
         .BUS_RST(BUS_RST),
         .BUS_ADD(BUS_ADD),
-        .BUS_DATA(BUS_DATA),
+        //.BUS_DATA(BUS_DATA),
         .BUS_RD(BUS_RD),
         .BUS_WR(BUS_WR),
 
         .ARM_TDC(CMD_START_FLAG), // arm TDC by sending commands
         .EXT_EN(1'b0),
 
-        .TIMESTAMP(TIMESTAMP[15:0])
+        .TIMESTAMP(TIMESTAMP[15:0]),
+
+        .BUS_DATA_IN(BUS_DATA_IN),
+        .CS_OUT(CS_OUT[j+11]),
+        .DATA_OUT(DATA_OUT[j+11]) //11 to 17
     );
 
     IBUFDS #(
@@ -752,14 +788,18 @@ tdc_s3 #(
     .BUS_CLK(BUS_CLK),
     .BUS_RST(BUS_RST),
     .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA),
+    //.BUS_DATA(BUS_DATA),
     .BUS_RD(BUS_RD),
     .BUS_WR(BUS_WR),
 
     .ARM_TDC(CMD_START_FLAG), // arm TDC by sending commands
     .EXT_EN(1'b0),
 
-    .TIMESTAMP(TIMESTAMP[15:0])
+    .TIMESTAMP(TIMESTAMP[15:0]),
+
+    .BUS_DATA_IN(BUS_DATA_IN),
+    .CS_OUT(CS_OUT[18]),
+    .DATA_OUT(DATA_OUT[18])
 );
 
 IBUFDS #(
@@ -772,8 +812,9 @@ IBUFDS #(
     .IB(RJ45_HITOR_N[7])
 );
 
-wire ARB_READY_OUT, ARB_WRITE_OUT;
-wire [31:0] ARB_DATA_OUT;
+(* mark_debug = "true" *) wire ARB_READY_OUT;
+(* mark_debug = "true" *) wire ARB_WRITE_OUT;
+(* mark_debug = "true" *) wire [31:0] ARB_DATA_OUT;
 wire [16:0] READ_GRANT;
 
 rrp_arbiter #(
@@ -792,14 +833,19 @@ rrp_arbiter #(
     .DATA_OUT(ARB_DATA_OUT)
 );
 
+//Continuous Output
+//assign ARB_DATA_OUT = 32'hA3B2C1D0;
+//assign ARB_WRITE_OUT = !FIFO_FULL;
+
 assign TRIGGER_FIFO_READ = READ_GRANT[0];
 assign FE_FIFO_READ = READ_GRANT[8:1];
 assign TDC_FIFO_READ = READ_GRANT[16:9];
 
 //cdc_fifo is for timing reasons
-wire [31:0] cdc_data_out;
-wire full_32to8, cdc_fifo_empty;
-wire FIFO_EMPTY;
+(* mark_debug = "true" *) wire [31:0] cdc_data_out;
+(* mark_debug = "true" *) wire full_32to8;
+(* mark_debug = "true" *) wire cdc_fifo_empty;
+(* mark_debug = "true" *) wire FIFO_EMPTY;
 cdc_syncfifo #(.DSIZE(32), .ASIZE(3)) cdc_syncfifo_i
 (
     .rdata(cdc_data_out),
@@ -866,5 +912,32 @@ assign LED[0] = ~((CLK_1HZ | FIFO_FULL) & LOCKED & LOCKED2);
 assign LED[1] = ~(((|(~RX_READY & RX_ENABLED_CLK40_BUF) || |(RX_8B10B_DECODER_ERR & RX_ENABLED_CLK40_BUF))? CLK_3HZ : CLK_1HZ) | (|(RX_FIFO_OVERFLOW_ERR & RX_ENABLED_CLK40_BUF)) | (|(RX_FIFO_FULL & RX_ENABLED_CLK40_BUF)));
 assign LED[2] = 1'b1;
 assign LED[3] = 1'b1;
+
+//
+always @ (CS_OUT)
+begin
+	MUX_DATA_OUT = 7'h0;
+  case (CS_OUT)
+	  19'b0000000000000000001 : MUX_DATA_OUT = DATA_OUT[0];
+		19'b0000000000000000010 : MUX_DATA_OUT = DATA_OUT[1];
+		19'b0000000000000000100 : MUX_DATA_OUT = DATA_OUT[2];
+		19'b0000000000000001000 : MUX_DATA_OUT = DATA_OUT[3];
+		19'b0000000000000010000 : MUX_DATA_OUT = DATA_OUT[4];
+		19'b0000000000000100000 : MUX_DATA_OUT = DATA_OUT[5];
+		19'b0000000000001000000 : MUX_DATA_OUT = DATA_OUT[6];
+		19'b0000000000010000000 : MUX_DATA_OUT = DATA_OUT[7];
+		19'b0000000000100000000 : MUX_DATA_OUT = DATA_OUT[8];
+		19'b0000000001000000000 : MUX_DATA_OUT = DATA_OUT[9];
+		19'b0000000010000000000 : MUX_DATA_OUT = DATA_OUT[10];
+		19'b0000000100000000000 : MUX_DATA_OUT = DATA_OUT[11];
+		19'b0000001000000000000 : MUX_DATA_OUT = DATA_OUT[12];
+		19'b0000010000000000000 : MUX_DATA_OUT = DATA_OUT[13];
+    19'b0000100000000000000 : MUX_DATA_OUT = DATA_OUT[14];
+    19'b0001000000000000000 : MUX_DATA_OUT = DATA_OUT[15];
+    19'b0010000000000000000 : MUX_DATA_OUT = DATA_OUT[16];
+    19'b0100000000000000000 : MUX_DATA_OUT = DATA_OUT[17];
+    19'b1000000000000000000 : MUX_DATA_OUT = DATA_OUT[18];
+ endcase
+end
 
 endmodule
